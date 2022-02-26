@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+    <!--The import of the remarkable library-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="header"></div>
+    <script type="text/babel">
+
+      ReactDOM.render(
+        <h1>React Practice</h1>,
+        document.getElementById('header')
+      );
+
+    </script>
+
+    <!--SIMPLE COMPONENT-->
+    <!--Id is for identificate where we put the data-->
+    <div id='hello-example'>
+    <script type="text/babel">
+        class HelloMessage extends React.Component {
+            render() {
+              return (
+                <div>
+                  <b>SIMPLE COMPONENT</b><br/>
+                  Hello {this.props.name}
+                </div>
+              );
+            }
+          }
+          
+          ReactDOM.render(
+            <HelloMessage name="Taylor" />,
+            document.getElementById('hello-example')
+          );
+    </script>
+    </div>
+
+
+    <!--Stateful Component-->
+    <!--Use when the state changes, update the dom-->
+    <div id="timer-example">
+    <script type="text/babel">
+    class Timer extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { seconds: 0 };
+        }
+      
+        tick() {
+          this.setState(state => ({
+            seconds: state.seconds + 1
+          }));
+        }
+      
+        componentDidMount() {
+          this.interval = setInterval(() => this.tick(), 1000);
+        }
+      
+        componentWillUnmount() {
+          clearInterval(this.interval);
+        }
+      
+        render() {
+          return (
+            <div>
+              <br/><b>STATEFUL COMPONENT</b><br/>
+              Seconds: {this.state.seconds}
+            </div>
+          );
+        }
+      }
+      
+      ReactDOM.render(
+        <Timer />,
+        document.getElementById('timer-example')
+      );
+    </script>
+    </div>
+
+    <!--APPLICATION-->
+    <div id="todos-example">
+    <script type="text/babel">
+    class TodoApp extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { items: [], text: '' };
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+      
+        render() {
+          return (
+            <div>
+              <h2>APPLICATION</h2>
+              <p>In Application we use props(statict elements) and state,<br/>for example here we use  state to track current list of items and get the task</p>
+              <h3>TODO-LIST</h3>
+              <TodoList items={this.state.items} />
+              <form onSubmit={this.handleSubmit}>
+                <label htmlFor="new-todo">
+                  What needs to be done?
+                </label>
+                <input
+                  id="new-todo"
+                  onChange={this.handleChange}
+                  value={this.state.text}
+                />
+                <button>
+                  Add #{this.state.items.length + 1}
+                </button>
+              </form>
+            </div>
+          );
+        }
+      
+        handleChange(e) {
+          this.setState({ text: e.target.value });
+        }
+      
+        handleSubmit(e) {
+          e.preventDefault();
+          if (this.state.text.length === 0) {
+            return;
+          }
+          const newItem = {
+            text: this.state.text,
+            id: Date.now()
+          };
+          this.setState(state => ({
+            items: state.items.concat(newItem),
+            text: ''
+          }));
+        }
+      }
+      
+      class TodoList extends React.Component {
+        render() {
+          return (
+            <ul>
+              {this.props.items.map(item => (
+                <li key={item.id}>{item.text}</li>
+              ))}
+            </ul>
+          );
+        }
+      }
+      
+      ReactDOM.render(
+        <TodoApp />,
+        document.getElementById('todos-example')
+      );
+    </script>
+    </div>
+
+    <!--COMPONENT USING EXTERNAL PLUGINS-->
+    <!--This plugin help us to convert textArea value in real time-->
+    <div id="markdown-example">
+    <script type="text/babel">
+        class MarkdownEditor extends React.Component {
+    constructor(props) {
+    super(props);
+    this.md = new Remarkable();
+    this.handleChange = this.handleChange.bind(this);
+    this.state = { value: 'Hello, **world**!' };
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
+  getRawMarkup() {
+    return { __html: this.md.render(this.state.value) };
+  }
+
+  render() {
+    return (
+      <div className="MarkdownEditor">
+        <h2>USING EXTERNAL PLUGINS : REMARKABLE </h2>
+        <h3>Input</h3>
+        <label htmlFor="markdown-content">
+          Enter some markdown
+        </label><br/>
+        <textarea
+          id="markdown-content"
+          onChange={this.handleChange}
+          defaultValue={this.state.value}
+        />
+        <h3>Output</h3>
+        <div
+          className="content"
+          dangerouslySetInnerHTML={this.getRawMarkup()}
+        />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <MarkdownEditor />,
+  document.getElementById('markdown-example')
+);
+    </script>
+    </div>
+
+  </body>
+</html>
+
