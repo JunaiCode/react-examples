@@ -32,14 +32,14 @@
               return (
                 <div>
                   <b>SIMPLE COMPONENT</b><br/>
-                  Hello {this.props.name}
+                  Hola {this.props.name1} y {this.props.name2}.
                 </div>
               );
             }
           }
           
           ReactDOM.render(
-            <HelloMessage name="Taylor" />,
+            <HelloMessage name1="Juan Manuel" name2="Samuel" />,
             document.getElementById('hello-example')
           );
     </script>
