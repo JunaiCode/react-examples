@@ -53,28 +53,59 @@
     class Timer extends React.Component {
         constructor(props) {
           super(props);
-          this.state = { seconds: 0 };
+          this.state = { seconds: 0 ,minutes: 0, hours: 0};
         }
       
-        tick() {
+        thick() {
           this.setState(state => ({
-            seconds: state.seconds + 1
-          }));
+            seconds: state.seconds + 1,
+            minutes: state.minutes,
+            hours: state.hours
+          }
+          ))
+          if(this.state.seconds == 60){
+            this.minutes();
+            }
+          if(this.state.minutes == 60){
+            this.hours();
+          }
+          ;
         }
       
         componentDidMount() {
-          this.interval = setInterval(() => this.tick(), 1000);
+          this.interval = setInterval(() => this.thick(), 1000);
         }
       
         componentWillUnmount() {
           clearInterval(this.interval);
         }
+
+        minutes(){
+          this.setState(state => ({
+            seconds: 0,
+            minutes: state.minutes + 1,
+            hours: state.hours
+          }
+          ));
+        }
+
+        hours(){
+          this.setState(state => ({
+            seconds: 0,
+            minutes: 0,
+            hours: state.hours + 1
+          }
+          ));
+        }
       
         render() {
           return (
             <div>
-              <br/><b>STATEFUL COMPONENT</b><br/>
-              Seconds: {this.state.seconds}
+              <br/><b>STATEFUL COMPONENT</b><br/><br/>
+              <b>TIME: </b> 
+              {this.state.hours}:
+              {this.state.minutes}:
+              {this.state.seconds}
             </div>
           );
         }
