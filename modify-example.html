@@ -118,6 +118,77 @@
     </script>
     </div>
 
+    <!--STATEFUL COMPONENT V2-->
+    <div id="timer-exampleV2">
+      <script type="text/babel">
+      class Timer extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = { seconds: 0 ,minutes: 0, hours: 0};
+          }
+        
+          thick() {
+            this.setState(state => ({
+              seconds: state.seconds + 1,
+              minutes: state.minutes,
+              hours: state.hours
+            }
+            ))
+            if(this.state.seconds == 10){
+              this.minutes();
+              }
+            if(this.state.minutes == 10){
+              this.hours();
+            }
+            ;
+          }
+          
+          componentDidMount() {
+            this.interval = setInterval(() => this.thick(), 1000);
+          }
+        
+          componentWillUnmount() {
+            clearInterval(this.interval);
+          }
+  
+          minutes(){
+            this.setState(state => ({
+              seconds: 0,
+              minutes: state.minutes + 1,
+              hours: state.hours
+            }
+            ));
+          }
+  
+          hours(){
+            this.setState(state => ({
+              seconds: 0,
+              minutes: 0,
+              hours: state.hours + 1
+            }
+            ));
+          }
+        
+          render() {
+            return (
+              <div>
+                <br/><b>STATEFUL COMPONENT V2</b><br/><br/>
+                <b>TIME: </b> 
+                {this.state.hours}:
+                {this.state.minutes}:
+                {this.state.seconds}
+              </div>
+            );
+          }
+        }
+        
+        ReactDOM.render(
+          <Timer />,
+          document.getElementById('timer-exampleV2')
+        );
+      </script>
+      </div>
+
     <!--APPLICATION-->
     <div id="todos-example">
     <script type="text/babel">
