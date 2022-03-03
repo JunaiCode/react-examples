@@ -272,6 +272,10 @@
     this.md = new Remarkable();
     this.handleChange = this.handleChange.bind(this);
     this.state = { value: 'Hello, **world**!' };
+    this.md.set({
+      html:true,
+      breaks:true
+    });
   }
 
   handleChange(e) {
